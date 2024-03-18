@@ -91,20 +91,32 @@ do {
             if (continuar == true){
                 num1 = resultados[(resultados.length - 1)]
                 num2 = parseInt(prompt("ingrese el numero por el que quiere dividir a " + resultados[(resultados.length - 1)]))
-                resultado = dividir(num1,num2)
+                if (num2 == 0) {
+                    alert("No te pases de vivo")
+                    continuar = false
+                }
+                else {
+                    resultado = dividir(num1,num2)
 
-                resultados.splice((resultados.length -2),2)
-                resultados.push(")","/", num2, "=",resultado)
-                resultados.unshift("(")
-                continuar = confirm("La division da como resultado: " + resultado + ", quiere continuar con la operacion?")
+                    resultados.splice((resultados.length -2),2)
+                    resultados.push(")","/", num2, "=",resultado)
+                    resultados.unshift("(")
+                    continuar = confirm("La division da como resultado: " + resultado + ", quiere continuar con la operacion?")
+                }
             }
             else {
                 num1 = parseInt(prompt("ingrese el primer numero a dividir"))
                 num2 = parseInt(prompt("ingrese el segundo numero a dividir"))
-                resultado = dividir(num1,num2)
+                if (num1 == 0 || num2 == 0) {
+                    alert("No te pases de vivo")
+                    continuar = false
+                }
+                else{
+                    resultado = dividir(num1,num2)
 
-                resultados.push(num1, "/", num2, "=",resultado)
-                continuar = confirm("La division da como resultado: " + resultado + ", quiere continuar con la operacion?")
+                    resultados.push(num1, "/", num2, "=",resultado)
+                    continuar = confirm("La division da como resultado: " + resultado + ", quiere continuar con la operacion?")
+                }
             }
             break
 
@@ -117,5 +129,10 @@ do {
     }
     
 } while (continuar == true)
-alert("tus cuentas fueron las siguientes: " + resultados.join(" "))
-console.log(resultados.join(" "))
+if (resultados.length == 0) {
+    alert("No hiciste suficientes calculos")
+}
+else{
+    alert("tus cuentas fueron las siguientes: " + resultados.join(" "))
+    console.log(resultados.join(" "))
+}
