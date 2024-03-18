@@ -1,19 +1,43 @@
 function sumar(num1, num2) {
+    // if (typeof num1 !== 'number' ||  isNaN(num1)) {
+    //     num1 = parseInt(prompt("El primer numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
+    // else if (typeof num2 !== 'number' || isNaN(num2)){
+    //     num2 = parseInt(prompt("El segundo numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
     resultado = num1 + num2
     return resultado
 }
 
 function restar(num1, num2) {
+    // if (typeof num1 !== 'number' ||  isNaN(num1)) {
+    //     num1 = parseInt(prompt("El primer numero ingresado no es valido. Ingrese un numero valido:")); 
+    // }
+    // else if (typeof num2 !== 'number' || isNaN(num2)){
+    //     num2 = parseInt(prompt("El segundo numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
     resultado = num1 - num2
     return resultado
 }
 
 function multiplicar(num1, num2) {
+    // if (typeof num1 !== 'number' ||  isNaN(num1)) {
+    //     num1 = parseInt(prompt("El primer numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
+    // else if (typeof num2 !== 'number' || isNaN(num2)){
+    //     num2 = parseInt(prompt("El segundo numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
     resultado = num1 * num2
     return resultado
 }
 
 function dividir(num1, num2) {
+    // if (typeof num1 !== 'number' ||  isNaN(num1)) {
+    //     num1 = parseInt(prompt("El primer numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
+    // else if (typeof num2 !== 'number' || isNaN(num2)){
+    //     num2 = parseInt(prompt("El segundo numero ingresado no es valido. Ingrese un numero valido:"));
+    // }
     resultado = num1 / num2
     return resultado
 }
@@ -42,7 +66,7 @@ do {
                 resultado = sumar(num1,num2)
 
                 resultados.push(num1, "+", num2, "=",resultado)
-                continuar = confirm("La suma da como resultado: " + resultado + ", quiere continuar con la operacion?")
+                continuar = confirm("La suma da como resultado: " + resultado + ", quiere continuar con la operacion?")                   
             }
             break
 
