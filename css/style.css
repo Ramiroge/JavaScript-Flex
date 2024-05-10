@@ -9,15 +9,7 @@ body {
   color: black;
   height: 100%;
 }
-.modoOscuro {
-  background-color: #212121;
-  color: white;
-}
-.modoOscuro .card h3,
-.modoOscuro .card p {
-  background-color: black;
-  color: white;
-}
+
 
 .Encabezado {
   padding: 10px 0;
@@ -104,6 +96,7 @@ body {
   right: 20px;
   font-size: 1rem;
   padding: 10px;
+  border-radius: 10px;
   background-color: gray;
   color: white;
 }
@@ -114,13 +107,38 @@ body {
   right: 20px;
   font-size: 1rem;
   padding: 10px;
-  background-color: gray;
-  color: white;
+  border-radius: 10px;
+  border-style: solid;
+  background-color: white;
   display: none;
+}
+.divCarrito h3 {
+  margin-bottom: 10px;
+}
+.divCarrito ul {
+  list-style: none;
+}
+.divCarrito li {
+  margin: 5px;
 }
 
 .mostrar {
   display: block;
 }
 
+.modoOscuro {
+  background-color: black;
+  color: white;
+  .divCarrito{
+    background-color: black;
+    color: white;
+  }
+  .card {
+      h3,
+      p {
+          background-color: black;
+          color: white;
+      }
+  }
+}
 /*# sourceMappingURL=style.css.map */

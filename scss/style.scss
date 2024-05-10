@@ -114,6 +114,7 @@ body {
     right: 20px;
     font-size: 1rem;
     padding: 10px;
+    border-radius: 10px;
     background-color: gray;
     color: white;
 }
@@ -124,9 +125,19 @@ body {
     right: 20px;
     font-size: 1rem;
     padding: 10px;
-    background-color: gray;
-    color: white;
+    border-radius: 10px;
+    border-style: solid;
+    background-color: white;
     display: none;
+    h3 {
+        margin-bottom: 10px;
+    }
+    ul{
+        list-style: none;
+    }
+    li {
+        margin: 5px
+    }
 }
 
 .mostrar {

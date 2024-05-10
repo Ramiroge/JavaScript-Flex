@@ -1,58 +1,14 @@
-// Definición de la clase Chocolate
-// class Chocolate {
-//     constructor(nombre, cacao, leche, imagen, categoria, precio, id) {
-//         this.nombre = nombre;
-//         this.cacao = cacao;
-//         this.leche = leche;
-//         this.imagen = imagen;
-//         this.categoria = categoria; 
-//         this.precio = precio;
-//         this.id = id;
-//     }
-// }
 
 
-
-// Obtener elementos del DOM
+// Definición de variables globales y constantes
 const contenedorMayor = document.getElementById("Container-Main");
-const contenedorBody = document.getElementById("Container-Main");
 const contenedorCard = document.getElementsByClassName("card");
+const contenedorCarrito = document.getElementById("contenidoCarrito");
 const boton = document.querySelector("#boton");
 const listaDeCategorias = document.getElementsByClassName("list");
 const ArrayDeListaDeCategoria = Array.from(listaDeCategorias);
 
-
-
-// Lista de chocolates
-// const Chocolates = [
-//     new Chocolate("Chocolate con Leche", "40%", "Leche Tradicional", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-con-leche21-ce255c0e584758ec4816899752187190-1024-1024.webp", "Con Leche", "2000", "LAT"),
-//     new Chocolate("Chocolate Blanco con Vainilla Natural",  "30%", "Leche Tradicional", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-blanco-con-vainilla-natural21-b290518d96e888c0a816899751055748-640-0.webp", "Con Leche", "2100", "BLA"),
-//     new Chocolate("Chocolate Amargo con Almendras & Sal Marina",  "73%", "Sin Leche", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-amargo-cacao-73-plant-based-almendras-sal-marina21-d924303c55f18e684616899751842109-640-0.webp", "Amargos", "2400", "ALM73"),
-//     new Chocolate("Chocolate Orgánico Amargo",  "73%", "Sin Leche", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-organico-amargo-cacao-73-plant-based31-6c7ab2cdd406866fea16899750928053-640-0.webp", "Amargos", "2300", "AMA"),
-//     new Chocolate("Chocolate Amargo al 80",  "80%", "Sin Leche", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-amargo-cacao-80-plant-based-sin-azucar11-d504209a254896cd0716940159910474-640-0.webp", "Amargos", "2900", "80"),
-//     new Chocolate("Chocolate Amargo al 100",  "100%", "Sin Leche", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-organico-extra-amargo-cacao-100-plant-based-sin-azucar11-36c188ed948ca8f49616940178428852-640-0.webp", "Amargos", "3000", "100"),
-//     new Chocolate("Chocolate con Leche de Coco Plant Based, Con Flakes de Arroz",  "39%", "Leche de Coco", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-con-leche-de-coco-plant-based-flakes-de-arroz-sin-azucar11-0205976308caff0c7c16940159530164-640-0.webp", "Veganos", "2800", "LCARROZ"),
-//     new Chocolate("Chocolate con Leche de Coco, Plant Based, Con Granos de Café Molidos",  "35%", "Leche de Coco", "https://acdn.mitiendanube.com/stores/003/236/931/products/chocolate-con-leche-de-coco-plant-based-granos-de-cafe-sin-azucar11-14d86893058c627e2f16940159690861-640-0.webp", "Veganos", "2800", "LCCAFE"),
-// ];
-
-
-
-
-// Al cargar el DOM
-document.addEventListener("DOMContentLoaded", () => {
-    // Verificar si hay una categoría almacenada en localStorage
-    const categoriaAlmacenada = obtenerCategoriaActual();
-    if (categoriaAlmacenada) {
-        // Mostrar los chocolates de la categoría almacenada
-        mostrarChocolatesPorCategoria(categoriaAlmacenada);
-    }
-    // Obtener y mostrar el contenido del carrito si existe
-    const contenidoCarrito = obtenerCarrito();
-    if (contenidoCarrito) {
-        const listaCarrito = document.querySelector('.listaCarrito');
-        listaCarrito.innerHTML = contenidoCarrito;
-    }
-});
+// Definición de funciones
 
 // Funciones para manejar localStorage
 function guardarCategoriaActual(categoria) {
@@ -63,53 +19,47 @@ function obtenerCategoriaActual() {
     return localStorage.getItem("categoriaActual");
 }
 
-// Mostrar chocolates por categoría
+function obtenerCarrito() {
+    return localStorage.getItem("Carrito");
+}
+
+// Función para mostrar chocolates por categoría
 function mostrarChocolatesPorCategoria(categoria) {
-    const ChocolatesFiltrados = Chocolates.filter((Chocolate) => {
-        return Chocolate.categoria.toUpperCase() == categoria.toUpperCase();
-    });
-
-    if (categoria.toUpperCase() === "SIN AZUCAR") {
-        const chocolatesSinAzucarEspeciales = Chocolates.filter((Chocolate) => {
-            return Chocolate.categoria.toUpperCase() === "AMARGOS" &&
-                (parseInt(Chocolate.cacao) === 80 || parseInt(Chocolate.cacao) === 100) ||
-                Chocolate.leche.toUpperCase().includes("LECHE DE COCO");
-        });
-        
-        ChocolatesFiltrados.push(...chocolatesSinAzucarEspeciales);
-    }
-
     contenedorMayor.innerHTML = "";
+    
+    fetch("./json/info.json")
+    .then(datos => {
+        if(!datos.ok){
+            throw new Error("Error al traer los datos")
+        } else {
+            return datos.json()
+        }
+    })
+    .then(productos => {
+        const ChocolatesFiltrados = productos.chocolates.filter((chocolate) => {
+            return chocolate.categoria.toUpperCase() === categoria.toUpperCase();
+        });
 
-    ChocolatesFiltrados.forEach((Chocolate) => {
-        crearChocolate(Chocolate);
+        if (categoria.toUpperCase() === "SIN AZUCAR") {
+            const chocolatesSinAzucarEspeciales = productos.chocolates.filter((chocolate) => {
+                return chocolate.categoria.toUpperCase() === "AMARGOS" &&
+                    (parseInt(chocolate.cacao) === 80 || parseInt(chocolate.cacao) === 100) ||
+                    chocolate.leche.toUpperCase().includes("LECHE DE COCO");
+            });
+        
+            ChocolatesFiltrados.push(...chocolatesSinAzucarEspeciales);
+        }
+
+        ChocolatesFiltrados.forEach((chocolate) => {
+            crearChocolate(chocolate);
+        });
+    })
+    .catch(e => {
+        console.error("Hubo un error al operar con fetch " + e.message);
     });
 }
 
-// Manejo de eventos para cada categoría
-ArrayDeListaDeCategoria.forEach(list => {
-    list.addEventListener("click", (e) => {
-        let categoria = e.target.innerText;
-
-        guardarCategoriaActual(categoria);
-
-        mostrarChocolatesPorCategoria(categoria);
-    });
-});
-
-// Cambiar color de fondo
-function cambiarColorFondo() {
-    contenedorBody.classList.toggle("modoOscuro")
-    Array.from(contenedorCard).forEach(card => {
-        card.classList.toggle("modoOscuro");
-    });
-}
-
-boton.addEventListener("click", cambiarColorFondo);
-
-
-
-// Crear una tarjeta para cada chocolate
+// Función para crear una tarjeta para cada chocolate
 const crearChocolate = (Chocolate) => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -145,54 +95,44 @@ const crearChocolate = (Chocolate) => {
     contenedorMayor.appendChild(card);
 }
 
+// Función para cambiar color de fondo
+function cambiarColorFondo() {
+    console.log("hola")
+    contenedorMayor.classList.toggle("modoOscuro");
+    contenedorCarrito.classList.toggle("modoOscuro");
+    Array.from(contenedorCard).forEach(card => {
+        card.classList.toggle("modoOscuro");
+    });
 
+}
 
-// Crear tarjetas para cada chocolate al cargar la página
-// Chocolates.forEach((Chocolate)=>{
-//     crearChocolate(Chocolate)
-// });
+// Función para guardar el carrito
+function guardarCarrito(listaCarrito) {
+    const contenidoCarrito = listaCarrito.innerHTML;
+    localStorage.setItem("Carrito", contenidoCarrito);
+}
 
-// Manejo de eventos para cada categoría al hacer clic
-ArrayDeListaDeCategoria.forEach(list=>{
-    list.addEventListener("click", (e)=>{
-        let categoria = e.target.innerText
+// Funcion para calcular el total de carrito
+function actualizarTotal() {
+    const listaCarrito = document.querySelector('.listaCarrito');
+    const productosEnCarrito = listaCarrito.querySelectorAll('li');
 
-        const ChocolatesFiltrados = Chocolates.filter((Chocolate)=>{
-            return Chocolate.categoria.toUpperCase() == categoria.toUpperCase()
-        })
+    let total = 0;
 
-        if (categoria.toUpperCase() === "SIN AZUCAR") {
-            const chocolatesSinAzucarEspeciales = Chocolates.filter((Chocolate) => {
-                return Chocolate.categoria.toUpperCase() === "AMARGOS" && 
-                       (parseInt(Chocolate.cacao) === 80 || parseInt(Chocolate.cacao) === 100) ||
-                       Chocolate.leche.toUpperCase().includes("LECHE DE COCO");
-            });
-            
-            ChocolatesFiltrados.push(...chocolatesSinAzucarEspeciales);
+    productosEnCarrito.forEach(producto => {
+        const cantidadTexto = producto.querySelector('.cantidad').textContent;
+        const cantidad = parseInt(cantidadTexto);
+        const precioTexto = producto.textContent.match(/Precio: (\d+)/);
+        if (precioTexto) {
+            const precio = parseInt(precioTexto[1]);
+            total += precio * cantidad;
         }
+    });
 
-        contenedorMayor.innerHTML = ""
-
-        ChocolatesFiltrados.forEach((Chocolate)=>{
-            crearChocolate(Chocolate)
-        })
-    })
-})
-
-// Carrito de Compras
-function abrirCarrito() {
-    contenidoCarrito.classList.toggle("mostrar");
+    document.getElementById('total').textContent = `Total: $${total}`;
 }
 
-carrito.addEventListener("click", abrirCarrito);
-
-function borrarCarrito() {
-    document.getElementById("listaCarrito").innerHTML = "<ul></ul>";
-    guardarCarrito(listaCarrito);
-}
-borrador.addEventListener("click", borrarCarrito)
-
-// Agregar un producto
+// Función para agregar un producto al carrito
 function agregarProducto(nombre, precio, id) {
     const listaCarrito = document.querySelector('.listaCarrito');
 
@@ -207,45 +147,74 @@ function agregarProducto(nombre, precio, id) {
     } else {
         // Si el producto no está en el carrito, agregarlo con cantidad 1
         const productoNuevo = document.createElement('li');
-        productoNuevo.innerHTML = `${nombre} - Precio: ${precio} - <span class="cantidad">1</span>`;
+        productoNuevo.innerHTML = `<span class="cantidad">1</span> x ${nombre} - Precio: ${precio}`;
         productoNuevo.classList = `guardarEnCarrito${id}`;
         listaCarrito.appendChild(productoNuevo);
     }
-
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Producto agregado al carrito",
+        text: `${nombre} - Precio: ${precio}`
+      });
     guardarCarrito(listaCarrito);
+    actualizarTotal();
 }
 
-function borrarProducto(id) {
-    const productoABorrar = document.querySelector(`.guardarEnCarrito${id}`);
-    productoABorrar.parentNode.removeChild(productoABorrar);
-    guardarCarrito(document.querySelector('.listaCarrito'));
+// Función para abrir el carrito
+function abrirCarrito() {
+    contenidoCarrito.classList.toggle("mostrar");
 }
 
-function guardarCarrito(listaCarrito) {
-    const contenidoCarrito = listaCarrito.innerHTML;
-    localStorage.setItem("Carrito", contenidoCarrito);
-}
-function obtenerCarrito() {
-    return localStorage.getItem("Carrito");
-}
-
-
-
-
-fetch("./json/info.json")
-.then(datos => {
-    if(!datos.ok){
-        throw new Error("Error al traer los datos")
-    }else{
-        return datos.json()
-    }
-})
-.then(productos => {
-    productos.chocolates.forEach(producto => {
-        crearChocolate(producto) 
+// Función para borrar el carrito
+function borrarCarrito() {
+    document.getElementById("listaCarrito").innerHTML = "<ul></ul>";
+    guardarCarrito(listaCarrito);
+    actualizarTotal();
+    Swal.fire({
+        icon: "success",
+        title: "Carrito borrado",
+        text: "El carrito ha sido borrado",
+        timer: 2500
     })
-    // agregarEvento() ///////////////////////////////
-})
-.catch(e => {
-    console.error("hubo un error al operar con fetch " + e.message)
-})
+}
+
+// Asignación de eventos y lógica relacionada con el DOM
+ArrayDeListaDeCategoria.forEach(list => {
+    list.addEventListener("click", (e) => {
+        let categoria = e.target.innerText;
+
+        guardarCategoriaActual(categoria);
+
+        mostrarChocolatesPorCategoria(categoria);
+    });
+});
+
+boton.addEventListener("click", cambiarColorFondo);
+carrito.addEventListener("click", abrirCarrito);
+borrador.addEventListener("click", borrarCarrito);
+
+// Llamadas a funciones necesarias al cargar el DOM
+document.addEventListener("DOMContentLoaded", () => {
+    const categoriaAlmacenada = obtenerCategoriaActual();
+    if (categoriaAlmacenada) {
+        mostrarChocolatesPorCategoria(categoriaAlmacenada);
+    }
+    const contenidoCarrito = obtenerCarrito();
+    if (contenidoCarrito) {
+        const listaCarrito = document.querySelector('.listaCarrito');
+        listaCarrito.innerHTML = contenidoCarrito;
+        actualizarTotal();
+    }
+});
+
