@@ -189,6 +189,30 @@ function borrarCarrito() {
     })
 }
 
+// Funcion confirmar carrito
+function confirmarCarrito() {
+    const total = document.getElementById('total').textContent;
+    Swal.fire({
+        title: "Confirmar carrito",
+        text: `Desea realizar la compra por el ${total} ?`,
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Confirmar compra"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Felicidades!",
+            text: "Su compra se ha realizado con exito",
+            icon: "success"
+          });
+          document.getElementById("listaCarrito").innerHTML = "<ul></ul>";
+          guardarCarrito(listaCarrito);
+          actualizarTotal();
+        }
+      });
+}
+
 // Asignación de eventos y lógica relacionada con el DOM
 ArrayDeListaDeCategoria.forEach(list => {
     list.addEventListener("click", (e) => {
@@ -203,6 +227,7 @@ ArrayDeListaDeCategoria.forEach(list => {
 boton.addEventListener("click", cambiarColorFondo);
 carrito.addEventListener("click", abrirCarrito);
 borrador.addEventListener("click", borrarCarrito);
+confirmador.addEventListener("click", confirmarCarrito);
 
 // Llamadas a funciones necesarias al cargar el DOM
 document.addEventListener("DOMContentLoaded", () => {

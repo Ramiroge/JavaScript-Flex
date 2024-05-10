@@ -125,7 +125,18 @@ body {
 .mostrar {
   display: block;
 }
-
+.botonCarrito{
+  font-size: 1rem;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: gray;
+}
+.botonCompraCarrito{
+  font-size: 1rem;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: green;
+}
 .modoOscuro {
   background-color: black;
   color: white;
